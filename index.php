@@ -28,15 +28,39 @@ foreach ($client->parseEvents() as $event) {
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                    $client->replyMessage(array(
-                        'replyToken' => $event['replyToken'],
-                        'messages' => array(
-                            array(
-                                'type' => 'text',
-                                'text' => $message['text']
+                    if($message['text']=="hi")
+                    {
+                        $client->replyMessage(array(
+                            'replyToken' => $event['replyToken'],
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => 'Hai Juga, saya Bot'
+                                )
                             )
-                        )
-                    ));
+                        ));    
+                    }
+                    else if(preg_match('/salam/i', $message['text']))
+                    {
+                        $client->replyMessage(array(
+                            'replyToken' => $event['replyToken'],
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => "Wa\'alaikumsalam warohmatullah"
+                                )
+                            )
+                        ));       
+                    }
+                    // $client->replyMessage(array(
+                    //     'replyToken' => $event['replyToken'],
+                    //     'messages' => array(
+                    //         array(
+                    //             'type' => 'text',
+                    //             'text' => $message['text']
+                    //         )
+                    //     )
+                    // ));
                     break;
                 default:
                     error_log("Unsupporeted message type: " . $message['type']);

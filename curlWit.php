@@ -7,4 +7,5 @@ $context = stream_context_create(array(
 ));
 $url = "https://api.wit.ai/message?v=".date('d-m-Y')."&q=".$_GET['id'];
 $data = file_get_contents($url, false, $context);
+echo $data;
 ?>

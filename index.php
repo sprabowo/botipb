@@ -40,7 +40,7 @@ foreach ($client->parseEvents() as $event) {
                     //         )
                     //     ));    
                     // }
-                    $prosesTeks = file_get_contents("https://blooming-brook-80964.herokuapp.com/curlWit.php?id=".$message['text']);
+                    $prosesTeks = file_get_contents("https://blooming-brook-80964.herokuapp.com/curlWit.php?id=".rawurlencode($message['text']));
                     $decodeTeks = json_decode($prosesTeks, TRUE);
                     if(preg_match('/salam/i', $message['text']))
                     {

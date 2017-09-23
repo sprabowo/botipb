@@ -28,19 +28,21 @@ foreach ($client->parseEvents() as $event) {
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                    if($message['text']=="hi")
-                    {
-                        $client->replyMessage(array(
-                            'replyToken' => $event['replyToken'],
-                            'messages' => array(
-                                array(
-                                    'type' => 'text',
-                                    'text' => 'Hai Juga, saya Bot'
-                                )
-                            )
-                        ));    
-                    }
-                    else if(preg_match('/salam/i', $message['text']))
+                    // if($message['text']=="hi")
+                    // {
+                    //     $client->replyMessage(array(
+                    //         'replyToken' => $event['replyToken'],
+                    //         'messages' => array(
+                    //             array(
+                    //                 'type' => 'text',
+                    //                 'text' => 'Hai Juga, saya Bot'
+                    //             )
+                    //         )
+                    //     ));    
+                    // }
+                    $prosesTeks = file_get_contents("https://blooming-brook-80964.herokuapp.com/curlWit.php?id=".$message['text']);
+                    $decodeTeks = json_decode($prosesTeks, TRUE);
+                    if(preg_match('/salam/i', $message['text']))
                     {
                         $client->replyMessage(array(
                             'replyToken' => $event['replyToken'],
@@ -52,20 +54,43 @@ foreach ($client->parseEvents() as $event) {
                             )
                         ));       
                     }
-                    else
+                    else if($decodeTeks['entities']['amount_of_money'] && $decodeTeks['entities']['intent'])
                     {
-                        $arr = array("sorry aku belum ngerti","ah apasih kamu","apatuh", "apasi");
-                        $randArr = rand(0,count($arr)-1);
-                        $client->replyMessage(array(
-                            'replyToken' => $event['replyToken'],
-                            'messages' => array(
-                                array(
-                                    'type' => 'text',
-                                    'text' => $arr[$randArr]
+                        if($decodeTeks['entities']['intent'][0]["value"]=='berapa')
+                        {
+                            //ngolah dari api currency fixer.io
+                            $url = "http://api.fixer.io/latest?base=".$decodeTeks['entities']['amount_of_money'][0]['unit']."&symbols=IDR";
+                            $getCurrency = file_get_contents($url);
+                            $decodeCurrency = json_decode($getCurrency,true);
+
+                            //perkalian value dan api fixer
+                            $hasil = $decodeTeks['entities']['amount_of_money'][0]["value"] * $decodeCurrency["rates"]["idr"];
+
+                            $client->replyMessage(array(
+                                'replyToken' => $event['replyToken'],
+                                'messages' => array(
+                                    array(
+                                        'type' => 'text',
+                                        'text' => "hasilnya ternyata segini ".$hasil
+                                    )
                                 )
-                            )
-                        ));       
+                            )); 
+                        }
                     }
+                    // else
+                    // {
+                    //     $arr = array("sorry aku belum ngerti","ah apasih kamu","apatuh", "apasi");
+                    //     $randArr = rand(0,count($arr)-1);
+                    //     $client->replyMessage(array(
+                    //         'replyToken' => $event['replyToken'],
+                    //         'messages' => array(
+                    //             array(
+                    //                 'type' => 'text',
+                    //                 'text' => $arr[$randArr]
+                    //             )
+                    //         )
+                    //     ));       
+                    // }
                     // $client->replyMessage(array(
                     //     'replyToken' => $event['replyToken'],
                     //     'messages' => array(

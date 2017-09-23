@@ -47,7 +47,21 @@ foreach ($client->parseEvents() as $event) {
                             'messages' => array(
                                 array(
                                     'type' => 'text',
-                                    'text' => "Wa\'alaikumsalam warohmatullah"
+                                    'text' => "Wa'alaikumsalam warohmatullah\n"
+                                )
+                            )
+                        ));       
+                    }
+                    else
+                    {
+                        $arr = array("sorry aku belum ngerti","ah apasih kamu","apatuh", "apasi");
+                        $randArr = rand(0,count($arr)-1);
+                        $client->replyMessage(array(
+                            'replyToken' => $event['replyToken'],
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => $arr[$randArr]
                                 )
                             )
                         ));       

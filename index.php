@@ -64,7 +64,7 @@ foreach ($client->parseEvents() as $event) {
                             $decodeCurrency = json_decode($getCurrency,true);
 
                             //perkalian value dan api fixer
-                            $hasil = $decodeTeks['entities']['amount_of_money'][0]["value"] * $decodeCurrency["rates"]["idr"];
+                            $hasil = $decodeTeks['entities']['amount_of_money'][0]["value"] * $decodeCurrency["rates"]["IDR"];
 
                             $client->replyMessage(array(
                                 'replyToken' => $event['replyToken'],
